@@ -286,3 +286,6 @@ struct macro macroHandling(char name_of_file[]){/*this function goes through the
     fclose(fptr);/*closing communication with file*/
     return m1;
 }
+
+void exampleForOmer(char name_of_file[]) {
+}
