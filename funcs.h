@@ -289,3 +289,7 @@ struct macro macroHandling(char name_of_file[]){/*this function goes through the
 
 void exampleForOmer(char name_of_file[]) {
 }
+void exampleForOmer1(char name_of_file[]) {
+}
+void exampleForOmer2(char name_of_file[]) {
+}
