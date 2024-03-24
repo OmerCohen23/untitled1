@@ -1,0 +1,15 @@
+# ninja log v5
+70	136	7329508351885268	untitled1.exe	50e5d9af3cf1d797
+2	70	7329508351253187	CMakeFiles/untitled1.dir/main.c.obj	5bb7bf28b0b68a52
+2	61	7326839843183650	CMakeFiles/untitled1.dir/macros_handler.c.obj	ebf8d0a64744a3fb
+1	77	7328619715502416	build.ninja	cac4b558c95eff77
+2	74	7329509424461197	CMakeFiles/untitled1.dir/main.c.obj	5bb7bf28b0b68a52
+75	138	7329509425081371	untitled1.exe	50e5d9af3cf1d797
+2	74	7329511270020274	CMakeFiles/untitled1.dir/main.c.obj	5bb7bf28b0b68a52
+74	139	7329511270649079	untitled1.exe	50e5d9af3cf1d797
+2	71	7329512605963553	CMakeFiles/untitled1.dir/main.c.obj	5bb7bf28b0b68a52
+71	135	7329512606588747	untitled1.exe	50e5d9af3cf1d797
+1	72	7329512858787992	CMakeFiles/untitled1.dir/main.c.obj	5bb7bf28b0b68a52
+72	137	7329512859421094	untitled1.exe	50e5d9af3cf1d797
+1	73	7329516243847231	CMakeFiles/untitled1.dir/main.c.obj	5bb7bf28b0b68a52
+73	139	7329516244477378	untitled1.exe	50e5d9af3cf1d797
