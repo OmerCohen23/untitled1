@@ -293,3 +293,5 @@ void exampleForOmer1(char name_of_file[]) {
 }
 void exampleForOmer2(char name_of_file[]) {
 }
+void exampleForOmer3(char name_of_file[]) {
+}
