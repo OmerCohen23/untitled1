@@ -10,9 +10,10 @@
 
 #endif //UNTITLED1_DATA_H
 
+/*
 struct macro {
     int start_index;
     int end_index;
     char name[FILESIZE];
     char def[FILESIZE];
-};
+};*/

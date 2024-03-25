@@ -150,7 +150,7 @@ void deleteIndex(char name_of_file[], int i, int j) {
         exit(EXIT_FAILURE);
     }
     while((c1 = fgetc(fptr)) != EOF) {
-        if(!(index > i &&  index < j))
+        if(!(index >= i &&  index < j))
             fputc(c1, result_file);
         index++;
     }
@@ -212,6 +212,7 @@ int find(char word_to_find[],char name_of_file[]) {
                 }
             }
             if (found) {
+                fclose(fptr);/*closing communication with file*/
                 return index; /*return the index where the word starts*/
             }
             /*rewind the file pointer to retry for next index*/
@@ -249,40 +250,85 @@ void conNextWord(char name_of_file[],char toBeConcatenated[],int endOfOrgWord){/
     fclose(fptr);/*closing communication with file*/
 
 }
-void copyMacroNameAndDef(char name_of_file[],char macroDef[],char macroName[]) {/*assuming there is macro in file*/
-    FILE *fptr;/*pointer to file input*/
-    fptr = fopen(name_of_file, "r");/*open communication with file*/
+void copyMacroNameAndDef(char name_of_file[],char macroName[],char macroDef[]) {/*assuming there is macro in file*/
     int macroIndex, endMacroIndex,macroNameIndex;
-    if (fptr == NULL) /*check if file opens*/    {
-        printf("\nfile would not open for some reason %s", name_of_file);
-
-    }
-    macroIndex =  find("mcro",name_of_file);
-    endMacroIndex = find("endmcro",name_of_file);
-    conNextWord(name_of_file,macroName,macroIndex+ length("mcro")+1);
+    macroIndex =  find(MACRO,name_of_file);
+    endMacroIndex = find(ENDMACRO,name_of_file);
+    conNextWord(name_of_file,macroName,macroIndex+ length(MACRO)+1);
     macroNameIndex = find(macroName,name_of_file);
-    printf("\nname:%s\n",macroName);
     copyIndexes(name_of_file,macroDef,macroNameIndex+ length(macroName),endMacroIndex);
 }
-struct macro macroHandling(char name_of_file[]){/*this function goes through the file, finds macros and puts their value in every place it says the macro's name*/
-    struct macro m1;
-    FILE *fptr;/*pointer to file input*/
+void singleMacroHandle(char name_of_file[]){/*this function goes through the file, finds macros and puts their value in every place it says the macro's name*/
+    char temp[] = "temp";
+    int index = 0;
     char c1;
+    FILE *fptr;/*pointer to file input*/
+    FILE *result_file;/*pointer to temp-middle file*/
+    /*find the macro*/
+    int macroStartIndex =find(MACRO,name_of_file);
+    int macroEndIndex = find(ENDMACRO,name_of_file) + length(ENDMACRO);
+    int m1Index ;
+    char macroName[FILESIZE]="";
+    char macroDef[FILESIZE]="";
+    /*find name and def of next macro*/
+    copyMacroNameAndDef(name_of_file,macroName,macroDef);
 
+    /*delete macro from file*/
+    deleteIndex(name_of_file,macroStartIndex,macroEndIndex);
 
-    fptr = fopen(name_of_file, "r");/*open communication with file*/
-    if (fptr == NULL) /*check if file opens*/    {
-        printf("\nfile would not open for some reason %s", name_of_file);
+    /*replace macro with its value*/
+
+    m1Index = find(macroName,name_of_file);
+    /*replace macro with its value*/
+    while(m1Index != -1){
+        fptr = fopen(name_of_file, "r");/*open communication with file*/
+        if (fptr == NULL) /*check if file opens*/    {
+            printf("\nfile would not open for some reason %s", name_of_file);
+
+        }
+        result_file = fopen(temp, "w");
+        /* If unable to create temporary file */
+        if (result_file == NULL)    {
+            printf("cant open file");
+            fclose(fptr);
+            exit(EXIT_FAILURE);
+        }
+        /*copy everything before the macro*/
+        while((c1 = fgetc(fptr)) != EOF) {
+            if(index < m1Index )
+                fputc(c1, result_file);
+            index++;
+        }
+        /*copy the macro's value*/
+        for(int i = 0; i < length(macroDef); i++){
+            fputc(macroDef[i], result_file);
+        }
+        index =0;
+        /*go back to the start of the file*/
+        rewind(fptr);
+        /*copy everything after the macro*/
+        while((c1 = fgetc(fptr)) != EOF) {
+            if(index >= m1Index + length(macroName))
+                fputc(c1, result_file);
+            index++;
+        }
+        fclose(fptr);/*closing communication with file*/
+        fclose(result_file);/*closing communication with file*/
+        remove(name_of_file);
+        rename(temp,name_of_file);
+        index = 0;
+
+        /*find the next macro name appearance*/
+        m1Index = find(macroName,name_of_file);
+    }
+
+}
+void multiMacroHandle(char name_of_file[]) {/*this function goes through the file, finds macros and puts their value in every place it says the macro's name*/
+    int flagMacro = find(MACRO,name_of_file);
+
+    while(flagMacro!=-1) {
+        singleMacroHandle(name_of_file);
+        flagMacro = find(MACRO,name_of_file);
 
     }
-    while(1){
-        m1.start_index = find(MACRO,name_of_file);/*macro index is the first appearance of "mcr" in the file*/
-        m1.end_index = find(ENDMACRO,name_of_file);/*macro index is the first appearance of "endmcr" in the file*/
-        //m1.name = nextWord(macroIndex);
-    }
-
-
-
-    fclose(fptr);/*closing communication with file*/
-    return m1;
 }
